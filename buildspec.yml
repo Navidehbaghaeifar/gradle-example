@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: openjdk11
+    commands:
+      # Install AWS CLI
+      - apt-get update && apt-get install -y awscli
+  pre_build:
+    commands:
+      # Retrieve parameter values from Parameter Store and set as environment variables
+      - export PARAM1=$(aws ssm get-parameter --name /DB/username --query 'Parameter.Value' --output text)
+      - export PARAM2=$(aws ssm get-parameter --name /DB/username --query 'Parameter.Value' --output text)
+  build:
+    commands:
+      # Use the environment variables in your build process
+      - echo "Parameter 1: $PARAM1"
+      - echo "Parameter 2: $PARAM2"
+      # Example: Use the parameters in your Gradle build
+      - ./gradlew info -Pparam1="$PARAM1" -Pparam2="$PARAM2"
+
+  post_build:
+    commands:
+      # Execute any post-build tasks such as testing, deploying, etc.
+      - echo "Build completed successfully!"
