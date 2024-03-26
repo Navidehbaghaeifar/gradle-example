@@ -10,14 +10,14 @@ phases:
   pre_build:
     commands:
       # Retrieve parameter values from Parameter Store and set as environment variables
-      - export PARAM1=$(aws ssm get-parameter --name /DB/username --query 'Parameter.Value' --output text)
-      - export PARAM2=$(aws ssm get-parameter --name /DB/username --query 'Parameter.Value' --output text)
+      - export PARAM1=$(aws ssm get-parameter --name /DB/username --region us-west-2 --with-decryption --query "Parameter.Value" --output text)
+      - export PARAM2=$(aws ssm get-parameter --name /DB/password --region us-west-2 --with-decryption --query "Parameter.Value" --output text)
   build:
     commands:
       - echo $PARAM1
       - echo $PARAM2
       # Example: Use the parameters in your Gradle build
-      - ./gradlew info -Pparam1="$PARAM1" -Pparam2="$PARAM2"
+      - ./gradlew build -Pparam1="$PARAM1" -Pparam2="$PARAM2"
 
   post_build:
     commands:
