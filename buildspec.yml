@@ -14,9 +14,8 @@ phases:
       - export PARAM2=$(aws ssm get-parameter --name /DB/username --query 'Parameter.Value' --output text)
   build:
     commands:
-      # Use the environment variables in your build process
-      - echo "Parameter 1: $PARAM1"
-      - echo "Parameter 2: $PARAM2"
+      - echo $PARAM1
+      - echo $PARAM2
       # Example: Use the parameters in your Gradle build
       - ./gradlew info -Pparam1="$PARAM1" -Pparam2="$PARAM2"
 
